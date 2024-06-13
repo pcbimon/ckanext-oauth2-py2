@@ -54,6 +54,7 @@ class OAuth2Controller(base.BaseController):
         self.oauth2helper.challenge(came_from_url)
 
     def callback(self):
+        log.debug('Callback called')
         try:
             token = self.oauth2helper.get_token()
             user_name = self.oauth2helper.identify(token)
