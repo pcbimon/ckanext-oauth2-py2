@@ -52,7 +52,7 @@ def get_came_from(state):
     return json.loads(b64decode(state)).get(constants.CAME_FROM_FIELD, '/')
 
 
-REQUIRED_CONF = ("authorization_endpoint", "token_endpoint", "client_id", "client_secret", "profile_api_url", "profile_api_user_field", "profile_api_mail_field")
+REQUIRED_CONF = ("authorization_endpoint", "token_endpoint", "client_id", "client_secret", "profile_api_url", "profile_api_user_field", "profile_api_mail_field","redirect_uri")
 
 
 class OAuth2Helper(object):
