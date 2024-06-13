@@ -154,7 +154,9 @@ class OAuth2Helper(object):
 
             # Token can be invalid
             if not profile_response.ok:
-                log.debug(profile_response)
+                # convert response to text before logging
+                res = profile_response.text
+                log.debug(res)
                 error = profile_response.json()
                 if error.get('error', '') == 'invalid_token':
                     raise ValueError(error.get('error_description'))
