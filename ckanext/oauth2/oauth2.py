@@ -94,6 +94,7 @@ class OAuth2Helper(object):
             self.scope = None
     def logout(self):
         environ = toolkit.request.environ
+        log.debug(environ)
         environ[u'repoze.who.application'] = HTTPUnauthorized()
         log.debug('Logout: Clearing the CKAN session')
         # Redirect to the logout URL
