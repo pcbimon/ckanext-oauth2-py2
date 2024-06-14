@@ -28,7 +28,7 @@ import ckan.lib.helpers as helpers
 import ckan.lib.base as base
 import ckan.plugins.toolkit as toolkit
 import oauth2
-from flask import session
+from flask import session, redirect, request
 
 from ckanext.oauth2.plugin import _get_previous_page
 
@@ -53,6 +53,14 @@ class OAuth2Controller(base.BaseController):
         came_from_url = _get_previous_page(constants.INITIAL_PAGE)
 
         self.oauth2helper.challenge(came_from_url)
+    def logout(self):
+        # Clear the CKAN session
+        session.clear()
+        request.environ['beaker.session'].delete()
+
+        # Redirect to OAuth2 provider logout URL
+        oauth2_logout_url = self.oauth2helper.get_logout_url()
+        return redirect(oauth2_logout_url)
     def callback(self):
         log.debug('Callback called')
         try:

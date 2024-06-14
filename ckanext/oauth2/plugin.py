@@ -109,7 +109,9 @@ class OAuth2Plugin(plugins.SingletonPlugin):
         m.connect('/authen-service/OAuthCallback',
                   controller='ckanext.oauth2.controller:OAuth2Controller',
                   action='callback')
-
+        m.connect('/authen-service/logout',
+                  controller='ckanext.oauth2.controller:OAuth2Controller',
+                  action='logout')
         # Redirect the user to the OAuth service register page
         if self.register_url:
             m.redirect('/user/register', self.register_url)
@@ -123,20 +125,6 @@ class OAuth2Plugin(plugins.SingletonPlugin):
             m.redirect('/user/edit/{user}', self.edit_url)
 
         return m
-    def logout(self):
-        log.debug('logout')
-        environ = toolkit.request.environ
-        if 'repoze.who.identity' in environ:
-            user_name = environ['repoze.who.identity']['repoze.who.userid']
-
-        log.debug('Trying to logout user %s' % user_name)
-        toolkit.c.user = None
-        toolkit.c.usertoken = None
-        toolkit.c.usertoken_refresh = None
-        toolkit.request.environ['beaker.session'].delete()
-        log.debug('User %s logged out' % user_name)
-        log.debug('Redirecting to %s' % self.oauth2helper.get_logout_url())
-        return redirect(self.oauth2helper.get_logout_url())
     def identify(self):
         log.debug('identify')
 
