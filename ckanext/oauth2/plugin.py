@@ -108,6 +108,11 @@ class OAuth2Plugin(plugins.SingletonPlugin):
         m.connect('/authen-service/OAuthCallback',
                   controller='ckanext.oauth2.controller:OAuth2Controller',
                   action='callback')
+        if self.oauth2helper.logout_url:
+            # Redirect the user to the OAuth service login page
+            m.connect('/user/_logout',
+                    controller='ckanext.oauth2.controller:OAuth2Controller',
+                    action='logout')
 
         # Redirect the user to the OAuth service register page
         if self.register_url:

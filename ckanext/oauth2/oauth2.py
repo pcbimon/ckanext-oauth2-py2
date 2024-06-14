@@ -81,6 +81,8 @@ class OAuth2Helper(object):
 
         # self.redirect_uri = urljoin(urljoin(toolkit.config.get('ckan.site_url', 'http://localhost:5000'), toolkit.config.get('ckan.root_path')), constants.REDIRECT_URL)
         self.redirect_uri = six.text_type(os.environ.get('CKAN_OAUTH2_REDIRECT_URL', toolkit.config.get('ckan.oauth2.redirect_url', ''))).strip()
+        self.logout_redirect = six.text_type(os.environ.get('CKAN_OAUTH2_LOGOUT_REDIRECT', toolkit.config.get('ckan.oauth2.logout_redirect', ''))).strip()
+        self.logout_url = six.text_type(os.environ.get('CKAN_OAUTH2_LOGOUT_URL', toolkit.config.get('ckan.oauth2.logout_url', ''))).strip()
         # Init db
         db.init_db(model)
 
@@ -89,7 +91,9 @@ class OAuth2Helper(object):
             raise ValueError("Missing required oauth2 conf: %s" % ", ".join(missing))
         elif self.scope == "":
             self.scope = None
-
+    def logout(self):
+        url = self.logout_url+'?post_logout_redirect_uri='+self.logout_redirect.encode('utf-8')
+        toolkit.redirect_to()
     def challenge(self, came_from_url):
         # This function is called by the log in function when the user is not logged in
         state = generate_state(came_from_url)
