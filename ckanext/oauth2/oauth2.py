@@ -99,8 +99,7 @@ class OAuth2Helper(object):
         # Redirect to the logout URL
         url = self.logout_url+'?post_logout_redirect_uri='+self.logout_redirect.encode('utf-8')
         log.debug('Logout: Redirecting to page {0}'.format(url))
-        toolkit.response.location = url
-        return url
+        return toolkit.redirect_to(url.encode('utf-8'))
     def challenge(self, came_from_url):
         # This function is called by the log in function when the user is not logged in
         state = generate_state(came_from_url)
