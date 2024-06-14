@@ -29,6 +29,7 @@ import ckan.lib.base as base
 import ckan.plugins.toolkit as toolkit
 import oauth2
 from flask import session, redirect, request
+from webob.exc import  HTTPUnauthorized
 
 from ckanext.oauth2.plugin import _get_previous_page
 
@@ -54,11 +55,10 @@ class OAuth2Controller(base.BaseController):
 
         self.oauth2helper.challenge(came_from_url)
     def logout(self):
+        environ = toolkit.request.environ
         # Clear the CKAN session
-        session.clear()
-        beaker_session = request.environ.get('beaker.session')
-        if beaker_session:
-            beaker_session.delete()
+        environ[u'came_from'] = '/'
+        environ[u'repoze.who.application'] = HTTPUnauthorized()
 
         # Redirect to OAuth2 provider logout URL
         oauth2_logout_url = self.oauth2helper.get_logout_url()
