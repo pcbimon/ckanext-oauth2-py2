@@ -126,6 +126,7 @@ class OAuth2Plugin(plugins.SingletonPlugin):
     def logout(self):
         log.debug('logout')
         session.clear()
+        g.user = None
         return redirect(self.oauth2helper.get_logout_url())
     def identify(self):
         log.debug('identify')
