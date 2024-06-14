@@ -29,7 +29,6 @@ import ckan.lib.base as base
 import ckan.plugins.toolkit as toolkit
 import oauth2
 from flask import session, redirect, request
-from webob.exc import  HTTPUnauthorized
 
 from ckanext.oauth2.plugin import _get_previous_page
 

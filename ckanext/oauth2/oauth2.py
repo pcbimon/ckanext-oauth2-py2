@@ -31,6 +31,7 @@ import os
 
 from base64 import b64encode, b64decode
 from ckan.plugins import toolkit
+from webob.exc import  HTTPUnauthorized
 from oauthlib.oauth2 import InsecureTransportError
 import requests
 from requests_oauthlib import OAuth2Session
@@ -92,6 +93,10 @@ class OAuth2Helper(object):
         elif self.scope == "":
             self.scope = None
     def logout(self):
+        environ = toolkit.request.environ
+        environ[u'repoze.who.application'] = HTTPUnauthorized()
+        log.debug('Logout: Clearing the CKAN session')
+        # Redirect to the logout URL
         url = self.logout_url+'?post_logout_redirect_uri='+self.logout_redirect.encode('utf-8')
         log.debug('Logout: Redirecting to page {0}'.format(url))
         toolkit.response.location = url
