@@ -129,6 +129,7 @@ class OAuth2Plugin(plugins.SingletonPlugin):
 
         return m
     def logout(self):
+        log.debug('logout')
         session.clear()
         self.oauth2helper.logout()
     def identify(self):
