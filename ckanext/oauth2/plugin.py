@@ -125,8 +125,16 @@ class OAuth2Plugin(plugins.SingletonPlugin):
         return m
     def logout(self):
         log.debug('logout')
-        session.clear()
-        g.user = None
+        environ = toolkit.request.environ
+        if 'repoze.who.identity' in environ:
+            user_name = environ['repoze.who.identity']['repoze.who.userid']
+
+        log.debug('Trying to logout user %s' % user_name)
+        toolkit.c.user = None
+        toolkit.c.usertoken = None
+        toolkit.c.usertoken_refresh = None
+        log.debug('User %s logged out' % user_name)
+        log.debug('Redirecting to %s' % self.oauth2helper.get_logout_url())
         return redirect(self.oauth2helper.get_logout_url())
     def identify(self):
         log.debug('identify')
