@@ -54,10 +54,6 @@ class OAuth2Controller(base.BaseController):
 
         self.oauth2helper.challenge(came_from_url)
     def logout(self):
-        environ = toolkit.request.environ
-        # Clear the CKAN session
-        environ[u'repoze.who.application'] = HTTPUnauthorized()
-
         # Redirect to OAuth2 provider logout URL
         self.oauth2helper.logout()
     def callback(self):
