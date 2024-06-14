@@ -29,6 +29,7 @@ from ckan import plugins
 from ckan.common import g
 from ckan.plugins import toolkit
 from urlparse import urlparse
+from flask import session
 
 log = logging.getLogger(__name__)
 
@@ -108,11 +109,11 @@ class OAuth2Plugin(plugins.SingletonPlugin):
         m.connect('/authen-service/OAuthCallback',
                   controller='ckanext.oauth2.controller:OAuth2Controller',
                   action='callback')
-        if self.oauth2helper.logout_url:
-            # Redirect the user to the OAuth service login page
-            m.connect('/user/_logout',
-                    controller='ckanext.oauth2.controller:OAuth2Controller',
-                    action='logout')
+        # if self.oauth2helper.logout_url:
+        #     # Redirect the user to the OAuth service login page
+        #     m.connect('/user/_logout',
+        #             controller='ckanext.oauth2.controller:OAuth2Controller',
+        #             action='logout')
 
         # Redirect the user to the OAuth service register page
         if self.register_url:
@@ -127,7 +128,9 @@ class OAuth2Plugin(plugins.SingletonPlugin):
             m.redirect('/user/edit/{user}', self.edit_url)
 
         return m
-
+    def logout(self):
+        session.clear()
+        self.oauth2helper.logout()
     def identify(self):
         log.debug('identify')
 
