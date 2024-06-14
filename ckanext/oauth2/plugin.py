@@ -133,6 +133,8 @@ class OAuth2Plugin(plugins.SingletonPlugin):
         toolkit.c.user = None
         toolkit.c.usertoken = None
         toolkit.c.usertoken_refresh = None
+        toolkit.request.environ['repoze.who.identity'] = None
+        toolkit.request.headers.remove(self.authorization_header)
         log.debug('User %s logged out' % user_name)
         log.debug('Redirecting to %s' % self.oauth2helper.get_logout_url())
         return redirect(self.oauth2helper.get_logout_url())
