@@ -56,7 +56,9 @@ class OAuth2Controller(base.BaseController):
     def logout(self):
         # Clear the CKAN session
         session.clear()
-        request.environ['beaker.session'].delete()
+        beaker_session = request.environ.get('beaker.session')
+        if beaker_session:
+            beaker_session.delete()
 
         # Redirect to OAuth2 provider logout URL
         oauth2_logout_url = self.oauth2helper.get_logout_url()
