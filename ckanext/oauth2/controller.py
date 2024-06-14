@@ -57,7 +57,6 @@ class OAuth2Controller(base.BaseController):
     def logout(self):
         environ = toolkit.request.environ
         # Clear the CKAN session
-        environ[u'came_from'] = '/'
         environ[u'repoze.who.application'] = HTTPUnauthorized()
 
         # Redirect to OAuth2 provider logout URL
