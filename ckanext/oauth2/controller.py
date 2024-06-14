@@ -60,8 +60,7 @@ class OAuth2Controller(base.BaseController):
         environ[u'repoze.who.application'] = HTTPUnauthorized()
 
         # Redirect to OAuth2 provider logout URL
-        oauth2_logout_url = self.oauth2helper.get_logout_url()
-        return redirect(oauth2_logout_url)
+        self.oauth2helper.logout()
     def callback(self):
         log.debug('Callback called')
         try:

@@ -91,9 +91,10 @@ class OAuth2Helper(object):
             raise ValueError("Missing required oauth2 conf: %s" % ", ".join(missing))
         elif self.scope == "":
             self.scope = None
-    def get_logout_url(self):
+    def logout(self):
         url = self.logout_url+'?post_logout_redirect_uri='+self.logout_redirect.encode('utf-8')
         log.debug('Logout: Redirecting to page {0}'.format(url))
+        toolkit.response.location = url
         return url
     def challenge(self, came_from_url):
         # This function is called by the log in function when the user is not logged in
