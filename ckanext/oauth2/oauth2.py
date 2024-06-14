@@ -96,6 +96,14 @@ class OAuth2Helper(object):
         environ = toolkit.request.environ
         log.debug(environ)
         environ[u'repoze.who.application'] = HTTPUnauthorized()
+        if user_name is None and 'repoze.who.identity' in environ:
+            user_name = environ['repoze.who.identity']['repoze.who.userid']
+            log.info('User %s logged using session' % user_name)
+        # remove the user token
+        user_token = db.UserToken.by_user_name(user_name=user_name)
+        if user_token:
+            model.Session.delete(user_token)
+            model.Session.commit()
         log.debug('Logout: Clearing the CKAN session')
         # Redirect to the logout URL
         url = self.logout_url+'?post_logout_redirect_uri='+self.logout_redirect.encode('utf-8')
