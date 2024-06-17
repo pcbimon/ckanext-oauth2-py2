@@ -67,7 +67,7 @@ class OAuth2Controller(base.BaseController):
                 self.oauth2helper.update_token(user_name, token)
                 self.oauth2helper.redirect_from_callback()
             except toolkit.ObjectNotFound:
-                log.error(f'User {user_name} not found in CKAN')
+                log.debug(f'User {user_name} not found in CKAN')
                 # helpers.flash_error('User not found system')
                 raise toolkit.ObjectNotFound('User not found in system')
         except Exception as e:
