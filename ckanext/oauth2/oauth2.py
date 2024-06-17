@@ -203,9 +203,9 @@ class OAuth2Helper(object):
         if len(users) == 1:
             user = users[0]
 
-        # If the user does not exist, we have to create it...
+        # If the user does not exist, raise an exception
         if user is None:
-            user = model.User(email=email)
+            raise ValueError('User with email %s does not exist' % email)
         # If the user state is deleted, we have to undelete it...
         elif user.is_active() is False:
             user.undelete()
