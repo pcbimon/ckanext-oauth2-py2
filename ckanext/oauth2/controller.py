@@ -60,9 +60,6 @@ class OAuth2Controller(base.BaseController):
         try:
             token = self.oauth2helper.get_token()
             user_name = self.oauth2helper.identify(token)
-            log.debug(f'User {user_name} identified')
-            # user = toolkit.get_action('user_show')(data_dict={'id': user_name})
-            # log.debug(f'User {user_name} found in CKAN')
             self.oauth2helper.remember(user_name)
             self.oauth2helper.update_token(user_name, token)
             self.oauth2helper.redirect_from_callback()
