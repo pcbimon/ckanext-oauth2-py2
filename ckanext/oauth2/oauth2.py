@@ -99,7 +99,6 @@ class OAuth2Helper(object):
             user_name = environ['repoze.who.identity']['repoze.who.userid']
             log.info('User %s logged using session' % user_name)
         if user_name is not None:
-            environ['repoze.who.identity']['repoze.who.userid'] = None
             headers = self._get_rememberer(environ).forget(environ)
             for header, value in headers:
                 toolkit.response.headers.add(header, value)
