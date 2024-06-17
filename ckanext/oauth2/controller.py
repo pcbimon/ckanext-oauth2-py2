@@ -28,7 +28,6 @@ import ckan.lib.helpers as helpers
 import ckan.lib.base as base
 import ckan.plugins.toolkit as toolkit
 import oauth2
-from flask import session, redirect, request
 
 from ckanext.oauth2.plugin import _get_previous_page
 
@@ -61,9 +60,16 @@ class OAuth2Controller(base.BaseController):
         try:
             token = self.oauth2helper.get_token()
             user_name = self.oauth2helper.identify(token)
-            self.oauth2helper.remember(user_name)
-            self.oauth2helper.update_token(user_name, token)
-            self.oauth2helper.redirect_from_callback()
+            # Check if the user exists in CKAN
+            try:
+                user = toolkit.get_action('user_show')(data_dict={'id': user_name})
+                self.oauth2helper.remember(user_name)
+                self.oauth2helper.update_token(user_name, token)
+                self.oauth2helper.redirect_from_callback()
+            except toolkit.ObjectNotFound:
+                log.error(f'User {user_name} not found in CKAN')
+                # helpers.flash_error('User not found system')
+                raise toolkit.ObjectNotFound('User not found in system')
         except Exception as e:
             log.exception(e)
             session.save()
