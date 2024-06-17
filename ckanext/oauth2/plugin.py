@@ -125,6 +125,8 @@ class OAuth2Plugin(plugins.SingletonPlugin):
             m.redirect('/user/edit/{user}', self.edit_url)
 
         return m
+    def logout(self):
+        self.oauth2helper.logout()
     def identify(self):
         log.debug('identify')
 
