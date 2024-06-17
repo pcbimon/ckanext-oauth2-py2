@@ -57,7 +57,7 @@ class OAuth2Controller(base.BaseController):
         # Redirect to OAuth2 provider logout URL
         self.oauth2helper.logout()
     def not_authorized(self):
-        return toolkit.render('not_authorized.html')
+        return toolkit.render('oauth2/not_authorized.html')
     def callback(self):
         log.debug('Callback called')
         try:
