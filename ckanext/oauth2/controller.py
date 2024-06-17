@@ -68,8 +68,9 @@ class OAuth2Controller(base.BaseController):
             self.oauth2helper.redirect_from_callback()
         except InsufficientScopeError as e:
             redirect_url = '/user/not_authorized'
-            toolkit.response.status_int = e.status_code
-            toolkit.response.location = redirect_url
+            # toolkit.response.status_int = e.status_code
+            # toolkit.response.location = redirect_url
+            return toolkit.redirect_to(redirect_url)
         except Exception as e:
             log.exception(e)
             session.save()
