@@ -154,6 +154,7 @@ class OAuth2Helper(object):
             access_token = bytes(token['access_token'])
             user_data = jwt.decode(access_token, verify=False)
             user = self.user_json(user_data)
+            log.debug('User data: %s', user)
         else:
 
             try:
