@@ -60,17 +60,11 @@ class OAuth2Controller(base.BaseController):
         try:
             token = self.oauth2helper.get_token()
             user_name = self.oauth2helper.identify(token)
-            # Check if the user exists in CKAN
-            try:
-                user = toolkit.get_action('user_show')(data_dict={'id': user_name})
-                log.debug(f'User {user_name} found in CKAN')
-                self.oauth2helper.remember(user_name)
-                self.oauth2helper.update_token(user_name, token)
-                self.oauth2helper.redirect_from_callback()
-            except toolkit.ObjectNotFound:
-                log.debug(f'User {user_name} not found in CKAN')
-                # helpers.flash_error('User not found system')
-                raise toolkit.ObjectNotFound('User not found in system')
+            user = toolkit.get_action('user_show')(data_dict={'id': user_name})
+            log.debug(f'User {user_name} found in CKAN')
+            self.oauth2helper.remember(user_name)
+            self.oauth2helper.update_token(user_name, token)
+            self.oauth2helper.redirect_from_callback()
         except Exception as e:
             log.exception(e)
             session.save()
