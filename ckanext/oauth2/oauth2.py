@@ -202,13 +202,11 @@ class OAuth2Helper(object):
         users = model.User.by_email(email)
         if len(users) == 1:
             user = users[0]
-
+        if user.is_active() is False:
+            user = None
         # If the user does not exist, raise an exception
         if user is None:
             raise ValueError('User with email %s does not exist' % email)
-        # If the user state is deleted, we have to undelete it...
-        elif user.is_active() is False:
-            user.undelete()
 
         # Now we update his/her user_name with the one provided by the OAuth2 service
         # In the future, users will be obtained based on this field
