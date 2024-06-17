@@ -112,6 +112,9 @@ class OAuth2Plugin(plugins.SingletonPlugin):
         m.connect('/user/_logout',
                   controller='ckanext.oauth2.controller:OAuth2Controller',
                   action='logout')
+        m.connect('/user/not_authorized',
+                  controller='ckanext.oauth2.controller:OAuth2Controller',
+                  action='not_authorized')
         # Redirect the user to the OAuth service register page
         if self.register_url:
             m.redirect('/user/register', self.register_url)

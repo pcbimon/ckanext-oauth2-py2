@@ -33,6 +33,7 @@ from base64 import b64encode, b64decode
 from ckan.plugins import toolkit
 from webob.exc import  HTTPUnauthorized
 from oauthlib.oauth2 import InsecureTransportError
+from oauthlib.oauth2.rfc6749.errors import InsufficientScopeError
 import requests
 from requests_oauthlib import OAuth2Session
 import six
@@ -206,7 +207,7 @@ class OAuth2Helper(object):
             user = None
         # If the user does not exist, raise an exception
         if user is None:
-            raise ValueError('User with email %s does not exist' % email)
+            raise InsufficientScopeError('User with email %s does not exist' % email)
 
         # Now we update his/her user_name with the one provided by the OAuth2 service
         # In the future, users will be obtained based on this field

@@ -28,6 +28,7 @@ import ckan.lib.helpers as helpers
 import ckan.lib.base as base
 import ckan.plugins.toolkit as toolkit
 import oauth2
+from oauthlib.oauth2.rfc6749.errors import InsufficientScopeError
 
 from ckanext.oauth2.plugin import _get_previous_page
 
@@ -55,6 +56,8 @@ class OAuth2Controller(base.BaseController):
     def logout(self):
         # Redirect to OAuth2 provider logout URL
         self.oauth2helper.logout()
+    def not_authorized(self):
+        return toolkit.render('not_authorized.html')
     def callback(self):
         log.debug('Callback called')
         try:
@@ -63,6 +66,9 @@ class OAuth2Controller(base.BaseController):
             self.oauth2helper.remember(user_name)
             self.oauth2helper.update_token(user_name, token)
             self.oauth2helper.redirect_from_callback()
+        except InsufficientScopeError as e:
+            redirect_url = '/user/not_authorized'
+            toolkit.response.location = redirect_url
         except Exception as e:
             log.exception(e)
             session.save()
