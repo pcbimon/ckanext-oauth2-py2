@@ -94,6 +94,7 @@ class OAuth2Helper(object):
             self.scope = None
     def logout(self):
         environ = toolkit.request.environ
+        user_name = None
         if user_name is None and 'repoze.who.identity' in environ:
             user_name = environ['repoze.who.identity']['repoze.who.userid']
             log.info('User %s logged using session' % user_name)
