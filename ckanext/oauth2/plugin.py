@@ -188,3 +188,4 @@ class OAuth2Plugin(plugins.SingletonPlugin):
         # Add this plugin's templates dir to CKAN's extra_template_paths, so
         # that CKAN will use this plugin's custom templates.
         plugins.toolkit.add_template_directory(config, 'templates')
+        plugins.toolkit.add_public_directory(config, 'public')
