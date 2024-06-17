@@ -109,7 +109,7 @@ class OAuth2Plugin(plugins.SingletonPlugin):
         m.connect('/authen-service/OAuthCallback',
                   controller='ckanext.oauth2.controller:OAuth2Controller',
                   action='callback')
-        m.connect('/authen-service/logout',
+        m.connect('/user/_logout',
                   controller='ckanext.oauth2.controller:OAuth2Controller',
                   action='logout')
         # Redirect the user to the OAuth service register page
@@ -125,8 +125,6 @@ class OAuth2Plugin(plugins.SingletonPlugin):
             m.redirect('/user/edit/{user}', self.edit_url)
 
         return m
-    def logout(self):
-        self.oauth2helper.logout()
     def identify(self):
         log.debug('identify')
 
