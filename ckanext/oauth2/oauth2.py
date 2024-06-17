@@ -94,12 +94,14 @@ class OAuth2Helper(object):
             self.scope = None
     def logout(self):
         environ = toolkit.request.environ
-        log.debug(environ)
         if user_name is None and 'repoze.who.identity' in environ:
             user_name = environ['repoze.who.identity']['repoze.who.userid']
             log.info('User %s logged using session' % user_name)
         if user_name is not None:
             environ['repoze.who.identity']['repoze.who.userid'] = None
+            headers = self._get_rememberer(environ).forget(environ)
+            for header, value in headers:
+                toolkit.response.headers.add(header, value)
             log.info('User %s logged out' % user_name)
         # Redirect to the logout URL
         url = self.logout_url+'?post_logout_redirect_uri='+self.logout_redirect.encode('utf-8')
@@ -232,6 +234,7 @@ class OAuth2Helper(object):
         rememberer = self._get_rememberer(environ)
         identity = {'repoze.who.userid': user_name}
         headers = rememberer.remember(environ, identity)
+        log.debug('Remember headers: %s', headers)
         for header, value in headers:
             toolkit.response.headers.add(header, value)
 
