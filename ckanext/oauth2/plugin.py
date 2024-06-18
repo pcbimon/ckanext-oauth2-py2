@@ -200,7 +200,7 @@ class OAuth2Plugin(plugins.SingletonPlugin):
     def get_auth_functions(self):
         # we need to prevent some actions being authorized.
         return {
-            'user_create': user_create,
+            # 'user_create': user_create,
             # 'user_update': user_update,
             'user_reset': user_reset,
             'request_reset': request_reset
