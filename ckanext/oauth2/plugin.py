@@ -227,6 +227,8 @@ class OAuth2Plugin(plugins.SingletonPlugin):
         schema = default_user_schema()
         schema['name'] = [toolkit.get_validator('ignore_empty')]
         schema['email'] = [toolkit.get_validator('ignore_empty')]
+        # schema password can missing
+        schema['password'] = [toolkit.get_validator('ignore_missing')]
         return schema
     def get_validators(self):
         return {'name_validator': name_validator}
