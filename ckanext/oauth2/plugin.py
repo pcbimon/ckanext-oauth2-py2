@@ -223,16 +223,5 @@ class OAuth2Plugin(plugins.SingletonPlugin):
         # that CKAN will use this plugin's custom templates.
         plugins.toolkit.add_template_directory(config, 'templates')
         plugins.toolkit.add_public_directory(config, 'public')
-    def get_helpers(self):
-        return {
-            'get_user_schema': self.update_user_schema
-        }
-    def update_user_schema(self, schema):
-        schema = lib_plugins.DefaultUserSchema()
-        schema['name'] = [toolkit.get_validator('not_empty')]
-        schema['email'] = [toolkit.get_validator('not_empty')]
-        # schema password can missing
-        schema['password'] = [toolkit.get_validator('ignore_empty'), toolkit.get_validator('ignore_missing'), toolkit.get_validator('unicode_safe')]
-        return schema
     def get_validators(self):
         return {'name_validator': name_validator}
