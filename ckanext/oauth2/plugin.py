@@ -126,7 +126,8 @@ class OAuth2Plugin(plugins.SingletonPlugin):
         # Redirect the user to the OAuth service reset page
         if self.edit_url:
             m.redirect('/user/edit/{user}', self.edit_url)
-
+        # overide edit view user
+        map.connect('user_edit', '/user/edit', controller='user', action='edit', template='/user/edit_user_form.html')
         return m
     def identify(self):
         log.debug('identify')
