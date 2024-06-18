@@ -127,7 +127,7 @@ class OAuth2Plugin(plugins.SingletonPlugin):
         if self.edit_url:
             m.redirect('/user/edit/{user}', self.edit_url)
         # overide edit view user
-        map.connect('user_edit', '/user/edit', controller='user', action='edit', template='/user/edit_user_form.html')
+        map.connect('/user/edit', controller='user', action='edit', template='/user/edit_user_form.html')
         return m
     def identify(self):
         log.debug('identify')
