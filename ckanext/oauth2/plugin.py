@@ -36,8 +36,11 @@ import ckan.lib.navl.dictization_functions as df
 from ckan.common import _
 from six import string_types
 from ckan.model import (PACKAGE_NAME_MAX_LENGTH)
+from ckan.logic.schema import default_user_schema
 
 Invalid = df.Invalid
+Missing = df.Missing
+missing = df.missing
 
 # Allow alphanumeric characters, spaces, dashes, and dots
 name_match = re.compile('[a-zA-Z0-9_\-\. ]+$')
@@ -220,5 +223,10 @@ class OAuth2Plugin(plugins.SingletonPlugin):
         # that CKAN will use this plugin's custom templates.
         plugins.toolkit.add_template_directory(config, 'templates')
         plugins.toolkit.add_public_directory(config, 'public')
+    def update_user_schema(self, schema):
+        schema = default_user_schema()
+        schema['name'] = [toolkit.get_validator('ignore_empty')]
+        schema['email'] = [toolkit.get_validator('ignore_empty')]
+        return schema
     def get_validators(self):
         return {'name_validator': name_validator}
