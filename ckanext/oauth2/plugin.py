@@ -55,14 +55,14 @@ def _no_permissions(context, msg):
 
 @toolkit.auth_sysadmins_check
 def user_create(context, data_dict):
-    if not toolkit.auth_sysadmins_check(context,data_dict):
+    if not context.get('auth_user_obj') or not context['auth_user_obj'].sysadmin:
         msg = toolkit._('Users cannot be edited.')
         return _no_permissions(context, msg)
 
 
 @toolkit.auth_sysadmins_check
 def user_update(context, data_dict):
-    if not toolkit.auth_sysadmins_check(context,data_dict):
+    if not context.get('auth_user_obj') or not context['auth_user_obj'].sysadmin:
         msg = toolkit._('Users cannot be edited.')
         return _no_permissions(context, msg)
 
