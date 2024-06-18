@@ -30,6 +30,17 @@ from ckan.common import g
 from ckan.plugins import toolkit
 from urlparse import urlparse
 from flask import session,redirect
+import re
+from ckan.lib.navl.validators import ignore_missing, not_empty, empty
+import ckan.lib.navl.dictization_functions as df
+from ckan.common import _
+from six import string_types
+from ckan.model import (PACKAGE_NAME_MAX_LENGTH)
+
+Invalid = df.Invalid
+
+# Allow alphanumeric characters, spaces, dashes, and dots
+name_match = re.compile('[a-zA-Z0-9_\-\. ]+$')
 
 log = logging.getLogger(__name__)
 
@@ -82,6 +93,23 @@ def _get_previous_page(default_page):
         came_from_url = default_page
 
     return came_from_url
+name_match = re.compile('[a-zA-Z0-9_\-\.]+$')
+
+def name_validator(value, context):
+    if not isinstance(value, string_types):
+        raise Invalid(_('Names must be strings'))
+
+    # check basic textual rules
+    if value in ['new', 'edit', 'search']:
+        raise Invalid(_('That name cannot be used'))
+    if len(value) < 2:
+        raise Invalid(_('Must be at least %s characters long') % 2)
+    if len(value) > PACKAGE_NAME_MAX_LENGTH:
+        raise Invalid(_('Name must be a maximum of %i characters long') % \
+                      PACKAGE_NAME_MAX_LENGTH)
+    if not name_match.match(value):
+        raise Invalid(_('Name must be alphanumeric characters, dashes, or dots only'))
+    return value
 
 
 class OAuth2Plugin(plugins.SingletonPlugin):
@@ -89,6 +117,7 @@ class OAuth2Plugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IAuthenticator, inherit=True)
     plugins.implements(plugins.IAuthFunctions, inherit=True)
     plugins.implements(plugins.IRoutes, inherit=True)
+    plugins.implements(plugins.IValidators)
     plugins.implements(plugins.IConfigurer)
 
     def __init__(self, name=None):
@@ -191,3 +220,5 @@ class OAuth2Plugin(plugins.SingletonPlugin):
         # that CKAN will use this plugin's custom templates.
         plugins.toolkit.add_template_directory(config, 'templates')
         plugins.toolkit.add_public_directory(config, 'public')
+    def get_validators(self):
+        return {'name_validator': name_validator}
