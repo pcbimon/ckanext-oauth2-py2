@@ -61,6 +61,8 @@ def user_create(context, data_dict):
         if not context['auth_user_obj'].sysadmin:
             msg = toolkit._('Only system administrators can create users')
             return _no_permissions(context, msg)
+        else:
+            return {'success': True}
     except Exception as e:
         return _no_permissions(context, msg)
 
@@ -73,6 +75,8 @@ def user_update(context, data_dict):
         if not context['auth_user_obj'].sysadmin:
             msg = toolkit._('Only system administrators can update users')
             return _no_permissions(context, msg)
+        else:
+            return {'success': True}
     except Exception as e:
         return _no_permissions(context, msg)
         
