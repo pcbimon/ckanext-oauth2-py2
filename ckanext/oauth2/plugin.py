@@ -56,6 +56,7 @@ def _no_permissions(context, msg):
 @toolkit.auth_sysadmins_check
 def user_create(context, data_dict):
     log.debug('Checking if the user can be created')
+    log.debug('User Request Is Admin? : %s' % (context['auth_user_obj'].sysadmin == True))
     try:
         if not context['auth_user_obj'].sysadmin:
             msg = toolkit._('Only system administrators can create users')
@@ -67,6 +68,7 @@ def user_create(context, data_dict):
 @toolkit.auth_sysadmins_check
 def user_update(context, data_dict):
     log.debug('Checking if the user can be updated')
+    log.debug('User Request Is Admin? : %s' % (context['auth_user_obj'].sysadmin == True))
     try:
         if not context['auth_user_obj'].sysadmin:
             msg = toolkit._('Only system administrators can update users')
